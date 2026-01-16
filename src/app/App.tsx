@@ -9,7 +9,9 @@ import {
   Bell,
   Menu,
   Settings,
-  User
+  User,
+  LineChart,
+  BookOpen
 } from 'lucide-react';
 import { EquityCurve } from '@/app/components/EquityCurve';
 import { MetricCardWithProgress } from '@/app/components/MetricCardWithProgress';
@@ -19,6 +21,8 @@ import { EmotionCoffeeCup } from '@/app/components/EmotionCoffeeCup';
 import { RecentAlerts } from '@/app/components/RecentAlerts';
 import { TradingHealth } from '@/app/components/TradingHealth';
 import Trades from '@/app/Trades';
+import Analytics from '@/app/Analytics';
+import Strategies from '@/app/Strategies';
 
 function Dashboard() {
   return (
@@ -164,6 +168,26 @@ function Sidebar() {
         >
           <Target size={24} />
         </Link>
+        <Link 
+          to="/analytics"
+          className={`p-3 rounded-xl transition-colors ${
+            location.pathname === '/analytics' 
+              ? 'bg-purple-500/10 border border-purple-500/20 text-purple-400' 
+              : 'hover:bg-white/5 text-gray-600 hover:text-purple-400'
+          }`}
+        >
+          <LineChart size={24} />
+        </Link>
+        <Link 
+          to="/strategies"
+          className={`p-3 rounded-xl transition-colors ${
+            location.pathname === '/strategies' 
+              ? 'bg-purple-500/10 border border-purple-500/20 text-purple-400' 
+              : 'hover:bg-white/5 text-gray-600 hover:text-purple-400'
+          }`}
+        >
+          <BookOpen size={24} />
+        </Link>
         <button className="p-3 rounded-xl hover:bg-white/5 transition-colors text-gray-600 hover:text-purple-400">
           <Bell size={24} />
         </button>
@@ -181,8 +205,21 @@ function Sidebar() {
 
 function Header() {
   const location = useLocation();
-  const pageTitle = location.pathname === '/trades' ? 'Trades' : 'Trading Dashboard';
-  const pageSubtitle = location.pathname === '/trades' ? 'Manage your trading history' : 'Welcome back, Trader';
+  
+  const getPageInfo = () => {
+    switch (location.pathname) {
+      case '/trades':
+        return { title: 'Trades', subtitle: 'Manage your trading history' };
+      case '/analytics':
+        return { title: 'Analytics', subtitle: 'Deep insights into your trading performance' };
+      case '/strategies':
+        return { title: 'Strategies', subtitle: 'Explore and manage your trading strategies' };
+      default:
+        return { title: 'Trading Dashboard', subtitle: 'Welcome back, Trader' };
+    }
+  };
+
+  const { title: pageTitle, subtitle: pageSubtitle } = getPageInfo();
   
   return (
     <header className="backdrop-blur-3xl bg-slate-950/40 border-b border-white/5 sticky top-0 z-40">
@@ -230,6 +267,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/trades" element={<Trades />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/strategies" element={<Strategies />} />
           </Routes>
         </div>
       </div>
